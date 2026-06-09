@@ -5,3 +5,32 @@ dist
 coverage
 .prisma
 .vercel
+
+# Environment files
+.env
+.env.*
+
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Database
+*.db
+*.db-journal
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

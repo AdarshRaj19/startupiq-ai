@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+//////////////////////////////////////////////////////
+// USER
+//////////////////////////////////////////////////////
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  role       UserRole @default(USER)
+  isVerified Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  startupIdeas StartupIdea[]
+}
+
+//////////////////////////////////////////////////////
+// STARTUP IDEA
+//////////////////////////////////////////////////////
+
+model StartupIdea {
+  id String @id @default(uuid())
+
+  title       String
+  description String
+
+  industry       String?
+  targetAudience String?
+
+  status IdeaStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  analyses Analysis[]
+}
+
+//////////////////////////////////////////////////////
+// AI ANALYSIS
+//////////////////////////////////////////////////////
+
+model Analysis {
+  id String @id @default(uuid())
+
+  marketScore Float?
+
+  competitionScore Float?
+
+  feasibilityScore Float?
+
+  innovationScore Float?
+
+  aiScore Float?
+
+  successProbability Float?
+
+  strengths String
+
+  weaknesses String
+
+  opportunities String
+
+  threats String
+
+  recommendation String
+
+  createdAt DateTime @default(now())
+
+  startupIdeaId String
+
+  startupIdea StartupIdea @relation(fields: [startupIdeaId], references: [id], onDelete: Cascade)
+}
+
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum IdeaStatus {
+  DRAFT
+  ANALYZED
+}
